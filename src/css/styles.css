@@ -24,6 +24,36 @@
   -webkit-text-size-adjust: 100%;
 }
 
+/* gallery */
+
+.gallery {
+  max-width: 1440px;
+  padding: 24px 56px;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  align-content: center;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin: 0 auto;
+}
+
+
+.gallery-image {
+  width: 360px;
+  height: 200px;
+  transition: transform 0.3s ease;
+}
+
+.gallery-image:hover,
+.gallery-image:focus {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+
+
 /* form */
 
 .feedback-form{
