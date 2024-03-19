@@ -7,6 +7,7 @@ const formStateKey = 'feedback-form-state';
 
 function formSubmitHandler(event){
     event.preventDefault();
+
     let textEmail = email.value.trim();
     let text = textarea.value.trim();
 
@@ -18,6 +19,8 @@ function formSubmitHandler(event){
     textarea.value = '';
 
     console.log('Saved data:', { textEmail, text });
+
+    localStorage.removeItem(formStateKey);
 };
 
 
