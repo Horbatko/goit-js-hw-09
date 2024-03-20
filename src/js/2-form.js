@@ -1,37 +1,46 @@
 
 let form = document.querySelector(".feedback-form");
-let email = form.querySelector('input[name = "email"]');
-let textarea  = form.querySelector('textarea[name = "message"]');
+let email = form.querySelector('input[name="email"]');
+let textarea = form.querySelector('textarea[name="message"]');
 const formStateKey = 'feedback-form-state';
 
-
-function formSubmitHandler(event){
+function formSubmitHandler(event) {
     event.preventDefault();
 
-    let textEmail = email.value.trim();
-    let text = textarea.value.trim();
+    let emailValue = email.value.trim();
+    let message = textarea.value.trim();
 
-    let infoJSON = JSON.stringify({textEmail, text});
+    if (!emailValue || !message) {
+        alert("Please fill in all fields.");
+        return;
+    }
 
-    localStorage.setItem(formStateKey, infoJSON)
+    let infoJSON = JSON.stringify({ email: emailValue, message: message });
+
+    localStorage.setItem(formStateKey, infoJSON);
 
     email.value = '';
     textarea.value = '';
 
-    console.log('Saved data:', { textEmail, text });
-
-    localStorage.removeItem(formStateKey);
-};
-
+    console.log('Saved data:', { emailValue, message });
+}
 
 form.addEventListener('submit', formSubmitHandler);
 
-// let jsn =  localStorage.getItem(formStateKey) ?? '';
-// try{
-//     let data = JSON.parse(jsn);
-// textarea.value = data.text;
-// form.email.value = data.textEmail
-// }
-// catch{
-//      console.log('No saved')
-// }
+
+window.addEventListener('load', function() {
+    let jsn = localStorage.getItem(formStateKey);
+    if (jsn) {
+        try {
+            let data = JSON.parse(jsn);
+            if (data.email !== undefined) {
+                email.value = data.email;
+            }
+            if (data.message !== undefined) {
+                textarea.value = data.message;
+            }
+        } catch (error) {
+            console.error('Error parsing saved data:', error);
+        }
+    }
+});
