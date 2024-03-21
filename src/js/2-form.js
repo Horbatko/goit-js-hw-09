@@ -1,8 +1,44 @@
-
 let form = document.querySelector(".feedback-form");
 let email = form.querySelector('input[name="email"]');
 let textarea = form.querySelector('textarea[name="message"]');
 const formStateKey = 'feedback-form-state';
+
+
+function saveFormData() {
+
+    let emailValue = email.value.trim() || ''; 
+    let message = textarea.value.trim() || '';
+
+
+    let formData = { email: emailValue, message: message };
+
+
+    let formDataJSON = JSON.stringify(formData);
+
+
+    localStorage.setItem(formStateKey, formDataJSON);
+}
+
+function loadFormData() {
+    let formDataJSON = localStorage.getItem(formStateKey);
+    if (formDataJSON) {
+        try {
+            let formData = JSON.parse(formDataJSON);
+            email.value = formData.email || ''; 
+            textarea.value = formData.message || ''; 
+        } catch (error) {
+            console.error('Error parsing saved data:', error);
+        }
+    }
+}
+
+
+window.addEventListener('load', loadFormData);
+
+
+email.addEventListener('input', saveFormData);
+textarea.addEventListener('input', saveFormData);
+
 
 function formSubmitHandler(event) {
     event.preventDefault();
@@ -15,32 +51,12 @@ function formSubmitHandler(event) {
         return;
     }
 
-    let infoJSON = JSON.stringify({ email: emailValue, message: message });
+    localStorage.removeItem(formStateKey);
 
-    localStorage.setItem(formStateKey, infoJSON);
+    console.log('Saved data:', { emailValue, message });
 
     email.value = '';
     textarea.value = '';
-
-    console.log('Saved data:', { emailValue, message });
 }
 
 form.addEventListener('submit', formSubmitHandler);
-
-
-window.addEventListener('load', function() {
-    let jsn = localStorage.getItem(formStateKey);
-    if (jsn) {
-        try {
-            let data = JSON.parse(jsn);
-            if (data.email !== undefined) {
-                email.value = data.email;
-            }
-            if (data.message !== undefined) {
-                textarea.value = data.message;
-            }
-        } catch (error) {
-            console.error('Error parsing saved data:', error);
-        }
-    }
-});
